@@ -64,6 +64,16 @@ class Customer {
 
   /** save this customer. */
 
+  /** Returns first and last names joined by a space (for now ...) */
+
+  fullName(){
+    return `${this.firstName} ${this.lastName}`
+
+    // const veronica = new Customer(Veronica, Ni, 7,)
+    // veronica.fullName()
+    // => "Veronica Ni"
+  }
+
   async save() {
     if (this.id === undefined) {
       const result = await db.query(
