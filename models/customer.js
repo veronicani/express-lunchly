@@ -71,9 +71,9 @@ class Customer {
                   phone,
                   notes
           FROM customers
-          WHERE first_name = $1
+          WHERE concat(first_name, ' ', last_name) ilike $1
           ORDER BY last_name, first_name`,
-        [name],
+        [`%${ name }%`],
     );
 
     return results.rows.map(c => new Customer(c));
