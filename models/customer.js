@@ -59,7 +59,12 @@ class Customer {
   /** get a customer by name. */
 
   static async getByName(name) {
+    // const caseName = name.toLowerCase();
     const results = await db.query(
+      // `SELECT concat(first_name,' ',last_name) as full_name
+      //     FROM customers
+      //     WHERE concat(first_name, last_name) ilike '%$1%'`,
+
           `SELECT id,
                   first_name AS "firstName",
                   last_name  AS "lastName",
