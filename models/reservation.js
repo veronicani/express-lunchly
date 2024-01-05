@@ -40,7 +40,6 @@ class Reservation {
     return results.rows.map(row => new Reservation(row));
   }
 
-  //TODO: Edit query on lines 56–61
 
   async save() {
     if (this.id === undefined) {
@@ -54,9 +53,9 @@ class Reservation {
     } else {
       await db.query(
             `UPDATE reservations
-             SET customerId=$1,
-                  numGuests=$2,
-                  startAt=$3,
+             SET customer_id=$1,
+                  num_guests=$2,
+                  start_at=$3,
                   notes=$4
              WHERE id = $5`, [
             this.customerId,
