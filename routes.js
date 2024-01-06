@@ -10,7 +10,7 @@ const Reservation = require("./models/reservation");
 
 const router = new express.Router();
 
-/** Homepage: show list of customers. */
+/** Homepage: show list of customers. TODO: search*/
 
 router.get("/", async function (req, res, next) {
   let customers;
