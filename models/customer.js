@@ -57,26 +57,24 @@ class Customer {
     return new Customer(customer);
   }
 
-  /** get a customer by name. */
+  /** Get customers by name match:
+   *    Examples: "john -> John Smith, John, Smithy, John Doe, Billy John"
+   *              "jOhn smI -> John Smith, John Smithy"
+   */
 
-  static async getByName(name) {
-    // const caseName = name.toLowerCase();
+  static async getByMatchingName(name) {
     const results = await db.query(
-      // `SELECT concat(first_name,' ',last_name) as full_name
-      //     FROM customers
-      //     WHERE concat(first_name, last_name) ilike '%$1%'`,
-
           `SELECT id,
                   first_name AS "firstName",
                   last_name  AS "lastName",
                   phone,
                   notes
           FROM customers
-          WHERE concat(first_name, ' ', last_name) ilike $1
+          WHERE CONCAT(first_name, ' ', last_name) ILIKE $1
           ORDER BY last_name, first_name`,
         [`%${ name }%`],
     );
-    //{customer_id: 24, count: 5, firstName: Michael, lname: Singh, phone}
+    
     return results.rows.map(c => new Customer(c));
   }
 
@@ -90,10 +88,10 @@ class Customer {
               c.last_name AS "lastName",
               c.phone,
               c.notes
-            FROM reservations as r
+            FROM reservations AS r
                 JOIN customers AS c ON (r.customer_id = c.id)
             GROUP BY r.customer_id, c.first_name, c.last_name, c.phone, c.notes
-            ORDER BY COUNT(*) desc
+            ORDER BY COUNT(*) DESC
             LIMIT (10);`
     );
 
