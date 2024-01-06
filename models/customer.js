@@ -6,7 +6,7 @@ const db = require("../db");
 const Reservation = require("./reservation");
 
 /** Customer of the restaurant. */
-
+//TODO: reservationCount can be a method instead, or look into getter/setter
 class Customer {
   constructor({ id, firstName, lastName, phone, notes, reservationCount }) {
     this.id = id;
@@ -61,7 +61,7 @@ class Customer {
    *    Examples: "john -> John Smith, John, Smithy, John Doe, Billy John"
    *              "jOhn smI -> John Smith, John Smithy"
    */
-
+  //TODO: name -> searchByName
   static async getByMatchingName(name) {
     const results = await db.query(
           `SELECT id,
@@ -79,7 +79,8 @@ class Customer {
   }
 
   /** Get top ten customers with most reservations ordered by # of reservations */
-
+  //TODO: count by reservation id vs * (open to bugs)
+  //TODO: try group by r.customer_id, c.id
   static async getTopTenCustomers(){
     const results = await db.query(
       `SELECT r.customer_id AS "id", 
