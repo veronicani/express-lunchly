@@ -8,12 +8,13 @@ const Reservation = require("./reservation");
 /** Customer of the restaurant. */
 
 class Customer {
-  constructor({ id, firstName, lastName, phone, notes }) {
+  constructor({ id, firstName, lastName, phone, notes, reservationCount }) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.phone = phone;
     this.notes = notes;
+    this.reservationCount = reservationCount;
   }
 
   /** find all customers. */
@@ -75,7 +76,7 @@ class Customer {
           ORDER BY last_name, first_name`,
         [`%${ name }%`],
     );
-
+    //{customer_id: 24, count: 5, firstName: Michael, lname: Singh, phone}
     return results.rows.map(c => new Customer(c));
   }
 
@@ -83,7 +84,8 @@ class Customer {
 
   static async getTopTenCustomers(){
     const results = await db.query(
-      `SELECT r.customer_id, COUNT(*),
+      `SELECT r.customer_id AS "id", 
+              COUNT(*) AS "reservationCount",
               c.first_name AS "firstName",
               c.last_name AS "lastName",
               c.phone,
@@ -95,13 +97,7 @@ class Customer {
             LIMIT (10);`
     );
 
-    console.log("*** results: ", results);
-
-    // [ {customer_id: x, count: y} ... ]
-
-
     return results.rows.map(c => new Customer(c));
-
   }
 
 
@@ -111,17 +107,13 @@ class Customer {
     return await Reservation.getReservationsForCustomer(this.id);
   }
 
-  /** save this customer. */
-
   /** Returns first and last names joined by a space (for now ...) */
 
   fullName(){
     return `${this.firstName} ${this.lastName}`
-
-    // const veronica = new Customer(Veronica, Ni, 7,)
-    // veronica.fullName()
-    // => "Veronica Ni"
   }
+
+  /** Save this customer. */
 
   async save() {
     if (this.id === undefined) {
